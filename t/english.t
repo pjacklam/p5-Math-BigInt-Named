@@ -3,7 +3,7 @@
 use strict;
 use Test;
 
-BEGIN
+BEGIN 
   {
   $| = 1;
   chdir 't' if -d 't';
@@ -11,7 +11,7 @@ BEGIN
   plan tests => 83;
   }
 
-# testing of Math::BigInt::Named::English, primarily for the $x->name() and
+# testing of Math::BigInt::Named::English, primarily for the $x->name() and 
 # $x->from_name() functionality, and not for the math functionality
 
 use Math::BigInt::Named::English;

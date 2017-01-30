@@ -1,0 +1,23 @@
+Print Math::BigInt's as named numbers in different styles
+
+(C) ..--- ----- ----- .---- by - . .-.. ... .-.-.-  All rights reserved.
+
+This package is a subclass of Math::BigInt and was inspired by Chris London
+Noll's 'number.pl' program.
+
+To test, unzip & untar package, then run
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+See ./examples/number.pl for how to use this package on a webserver or on the
+command line.
+
+See INSTALL for detailed help on installing these modules.
+
+Please send me test-reports, your experiences with this and your ideas - I love
+to hear about my work!
+
+Tels <http://bloodgate.com/>

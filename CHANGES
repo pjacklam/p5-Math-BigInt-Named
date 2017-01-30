@@ -7,6 +7,8 @@ Math::BigInt::Named:
 
 2001-11-20 v0.01 Tels
  * first release
+2001-12-30 v0.02 Tels
+ * added German and English (own subclass), some tests and some real code.
 
 Please send me test-reports, your experiences with this and your ideas - I love
 to hear about my work!

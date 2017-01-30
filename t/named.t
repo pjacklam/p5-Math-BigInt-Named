@@ -3,14 +3,14 @@
 use strict;
 use Test::More;
 
-BEGIN
+BEGIN 
   {
   chdir 't' if -d 't';
   unshift @INC, '../lib'; # for running manually
   plan tests => 7;
   }
 
-# testing of Math::BigInt::Named::German, primarily for the $x->name() and
+# testing of Math::BigInt::Named::German, primarily for the $x->name() and 
 # $x->from_name() functionality, and not for the math functionality
 
 use Math::BigInt::Named;
@@ -41,3 +41,4 @@ is ($c->new('foobar'),'NaN', 'NaN');
 
 my $name = Math::BigInt::Named->name(123);
 is ($name, 'onehundredtwentythree', 'default en')
+

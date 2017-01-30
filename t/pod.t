@@ -2,7 +2,7 @@
 
 use Test::More;
 use strict;
-
+   
 my $tests;
 
 BEGIN
@@ -25,3 +25,4 @@ SKIP:
   pod_file_ok( '../lib/Math/BigInt/Named/English.pm' );
   pod_file_ok( '../lib/Math/BigInt/Named/German.pm' );
   }
+

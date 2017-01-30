@@ -1,19 +1,22 @@
-#!/usr/bin/perl -w
+#!perl
 
 package Math::BigInt::Named::English;
 
-require 5.006001;
-use base 'Math::BigInt::Named';
-$VERSION = '0.02';
-
+use 5.006001;
 use strict;
+use warnings;
+
+use Math::BigInt::Named;
+our @ISA = qw< Math::BigInt::Named >;
+
+our $VERSION = '0.04';
 
 sub name
   {
   # output the name of the number
   my ($x) = shift;
   $x = Math::BigInt->new($x) unless ref($x);
- 
+
   my $self = ref($x);
 
   return '' if $x->is_nan();
@@ -27,7 +30,7 @@ sub name
     $ret = 'minus ';
     $y->babs();
     }
-  if ($y < 1000) 
+  if ($y < 1000)
     {
     return $ret . $self->_triple($y,1,0);
     }
@@ -43,7 +46,7 @@ sub name
   $ret;
   }
 
-my $SMALL = [ qw/ 
+my $SMALL = [ qw/
   zero
   one
   two
@@ -58,7 +61,7 @@ my $SMALL = [ qw/
   eleven
   twelf
   thirteen
-  fourteen 
+  fourteen
   fifteen
   sixteen
   seventeen
@@ -76,7 +79,7 @@ my $ZEHN = [ qw /
   seventy
   eighty
   ninety
-  / ];  
+  / ];
 
 my $HUNDERT = [ qw /
   one
@@ -88,7 +91,7 @@ my $HUNDERT = [ qw /
   seven
   eight
   nine
-  / ];  
+  / ];
 
 my $TRIPLE = [ qw /
   mi
@@ -104,10 +107,10 @@ my $TRIPLE = [ qw /
 sub _triple_name
   {
   my ($self,$index,$number) = @_;
-  
+
   return '' if $index == 0 || $number->is_zero();
   return 'thousand' if $index == 1;
- 
+
   my $postfix = 'llion'; my $plural = 's';
   if (($index & 1) == 1)
     {
@@ -134,22 +137,24 @@ sub _triple
   my $rc = '';
   $rc = "$HUNDERT->[$hundert-1]hundred" if !$hundert->is_zero();
 
-  my $concat = ''; $concat = 'and' if $rc ne ''; 
+  my $concat = ''; $concat = 'and' if $rc ne '';
   return $rc if $rem->is_zero();
   return $rc . $concat . $SMALL->[$rem] if $rem < scalar @$SMALL;
-  
+
   my $zehn; ($zehn,$rem) = $rem->bdiv(10);
 
-  my $last = ''; 
+  my $last = '';
   $last = $HUNDERT->[$rem-1] if !$rem->is_zero(); 	# 31, 32..
   $last = $ZEHN->[$zehn-1].$last if !$zehn->is_zero();  	# 1,2,3..
-  
+
   $rc . $last;
   }
 
 1;
 
 __END__
+
+=pod
 
 =head1 NAME
 
@@ -182,14 +187,28 @@ L<Math::BigInt::Named>.
 Convert a BigInt to a name.
 
 =head2 from_name()
-  
+
 	my $bigint = Math::BigInt::Name->from_name('hundertzwanzig');
 
 Create a Math::BigInt::Name from a name string. B<Not yet implemented!>
 
 =head1 BUGS
 
-None know yet. Please see also L<Math::BigInt::Named>.
+For information about bugs and how to report them, see the BUGS section in the
+documentation available with the perldoc command.
+
+    perldoc Math::BigInt::Named
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Math::BigInt::Named::English
+
+For more information, see the SUPPORT section in the documentation available
+with the perldoc command.
+
+    perldoc Math::BigInt::Named
 
 =head1 LICENSE
 
@@ -198,17 +217,20 @@ the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<Math::BigFloat> and L<Math::Big> as well as L<Math::BigInt::BitVect>,
-L<Math::BigInt::Pari> and  L<Math::BigInt::GMP>.
-
-The package at
-L<http://search.cpan.org/search?dist=Math-BigInt-Named> may
-contain more documentation and examples as well as testcases.
+L<Math::BigInt::Named>, L<Math::BigIn> and L<Math::BigFloat>.
 
 =head1 AUTHORS
 
-(C) by Tels http://bloodgate.com/ in late 2001, early 2002, 2007.
+=over 4
 
-Based on work by Chris London Noll.
+=item *
+
+(C) by Tels http://bloodgate.com in late 2001, early 2002, 2007.
+
+=item *
+
+Maintained by Peter John Acklam E<lt>pjacklam@gmail.com<gt>, 2016-.
+
+=back
 
 =cut

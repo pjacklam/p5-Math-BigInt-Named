@@ -1,17 +1,17 @@
-#!/usr/bin/perl -w
+#!perl
 
 package Math::BigInt::Named;
 
-require 5.006001;
+use 5.006001;
 use strict;
+use warnings;
 
-use Math::BigInt::Named;
-use vars qw($VERSION @ISA
-            $accuracy $precision $round_mode $div_scale);
+our ($accuracy, $precision, $round_mode, $div_scale);
 
-@ISA = qw(Math::BigInt);
+use Math::BigInt '1.97';
+our @ISA = qw(Math::BigInt);
 
-$VERSION = '0.03';
+our $VERSION = '0.04';
 
 # Globals
 $accuracy = $precision = undef;
@@ -76,6 +76,8 @@ sub from_name
 
 __END__
 
+=pod
+
 =head1 NAME
 
 Math::BigInt::Named - Math::BigInts that know their name in some languages
@@ -95,7 +97,7 @@ Math::BigInt::Named - Math::BigInts that know their name in some languages
 
 =head1 DESCRIPTION
 
-This is a subclass of Math::BigInt and adds support for named numbers. 
+This is a subclass of Math::BigInt and adds support for named numbers.
 
 =head1 METHODS
 
@@ -106,14 +108,51 @@ This is a subclass of Math::BigInt and adds support for named numbers.
 Convert a BigInt to a name.
 
 =head2 from_name()
-  
+
 	my $bigint = Math::BigInt::Name->from_name('hundertzwanzig');
 
 Create a Math::BigInt::Name from a name string. B<Not yet implemented!>
 
 =head1 BUGS
 
-Not fully implemented yet. Please see also L<Math::BigInt>.
+Please report any bugs or feature requests to
+C<bug-math-bigint at rt.cpan.org>, or through the web interface at
+L<https://rt.cpan.org/Ticket/Create.html?Queue=Math-BigInt-Named>
+(requires login).
+We will be notified, and then you'll automatically be notified of
+progress on your bug as I make changes.
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Math::BigInt::Named
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Math-BigInt-Named>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/Math-BigInt-Named>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/dist/Math-BigInt-Named>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/Math-BigInt-Named/>
+
+=item * CPAN Testers Matrix
+
+L<http://matrix.cpantesters.org/?dist=Math-BigInt-Named>
+
+=back
 
 =head1 LICENSE
 
@@ -122,17 +161,24 @@ the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<Math::BigFloat> and L<Math::Big> as well as L<Math::BigInt::BitVect>,
-L<Math::BigInt::Pari> and  L<Math::BigInt::GMP>.
-
-The package at
-L<http://search.cpan.org/search?dist=Math-BigInt-Named> may
-contain more documentation and examples as well as testcases.
+L<Math::BigIn> and L<Math::BigFloat>.
 
 =head1 AUTHORS
 
-(C) by Tels <http://bloodgate.com> in late 2001, early 2002, 2007.
+=over 4
+
+=item *
+
+(C) by Tels http://bloodgate.com in late 2001, early 2002, 2007.
+
+=item *
+
+Maintainted by Peter John Acklam E<lt>pjacklam@gmail.com<gt>, 2016-.
+
+=item *
 
 Based on work by Chris London Noll.
+
+=back
 
 =cut

@@ -1,9 +1,0 @@
-
-Contains now Math::BigInt::Named::German and Math::BigInt::Named::English.
-Sightly more tests.
-Does now some real work, instead of pretending it knows its name.
-
-Please know arbitrarily big amounts of names.
-
-Tels <http://bloodgate.com/perl>
-

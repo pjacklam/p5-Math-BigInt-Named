@@ -1,18 +1,17 @@
-#!/usr/bin/perl -w
+#!perl
 
 package Math::BigInt::Named;
 
-require 5.005_02;
+use 5.006001;
 use strict;
+use warnings;
 
-use Exporter;
-use Math::BigInt::Named;
-use vars qw($VERSION @ISA $PACKAGE @EXPORT_OK
-            $accuracy $precision $round_mode $div_scale);
+our ($accuracy, $precision, $round_mode, $div_scale);
 
-@ISA = qw(Exporter Math::BigInt);
+use Math::BigInt 1.97;
+our @ISA = qw(Math::BigInt);
 
-$VERSION = 0.02;
+our $VERSION = '0.03';
 
 # Globals
 $accuracy = $precision = undef;
@@ -27,7 +26,8 @@ my $LANGUAGE = {
   de => 'german',
   sp => 'spanish',
   fr => 'french',
-  ro => 'Romana',
+  ro => 'romana',
+  it => 'italian',
   };
 
 my $LOADED = { };
@@ -36,6 +36,9 @@ sub name
   {
   # output the name of the number
   my ($x) = shift;
+
+  # make Math::BigInt::Name->name(123) work
+  $x = $x->new( shift ) unless ref ($x);
 
   return 'NaN' if $x->is_nan();
 
@@ -58,7 +61,7 @@ sub name
     eval "use $lang;"; $LOADED->{$lang} = 1;
     }
   my $y = $lang->new($x);
-  return $y->name();
+  $y->name();
   }
 
 sub from_name
@@ -69,17 +72,11 @@ sub from_name
   my $x = Math::BigInt->bnan();
   }
 
-#sub import
-#  {
-#  my $self = shift;
-#  Math::BigInt->import(@_);
-#  $self->SUPER::import(@_);                     # need it for subclasses
-#  #$self->export_to_level(1,$self,@_);           # need this ?
-#  }
-
 1;
 
 __END__
+
+=pod
 
 =head1 NAME
 
@@ -100,27 +97,62 @@ Math::BigInt::Named - Math::BigInts that know their name in some languages
 
 =head1 DESCRIPTION
 
-This is a subclass of Math::BigInt and adds support for named numbers. 
+This is a subclass of Math::BigInt and adds support for named numbers.
 
-=head2 MATH LIBRARY
+=head1 METHODS
 
-Math with the numbers is done (by default) by a module called
-Math::BigInt::Calc. This is equivalent to saying:
+=head2 name()
 
-	use Math::BigInt::Named lib => 'Calc';
+	print Math::BigInt::Name->name( 123 );
 
-You can change this by using:
+Convert a BigInt to a name.
 
-	use Math::BigInt::Named lib => 'BitVect';
+=head2 from_name()
 
-The following would first try to find Math::BigInt::Foo, then
-Math::BigInt::Bar, and when this also fails, revert to Math::BigInt::Calc:
+	my $bigint = Math::BigInt::Name->from_name('hundertzwanzig');
 
-	use Math::BigInt::Named lib => 'Foo,Math::BigInt::Bar';
+Create a Math::BigInt::Name from a name string. B<Not yet implemented!>
 
 =head1 BUGS
 
-None know yet. Please see also L<Math::BigInt>.
+Please report any bugs or feature requests to
+C<bug-math-bigint at rt.cpan.org>, or through the web interface at
+L<https://rt.cpan.org/Ticket/Create.html?Queue=Math-BigInt-Named>
+(requires login).
+We will be notified, and then you'll automatically be notified of
+progress on your bug as I make changes.
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Math::BigInt::Named
+
+You can also look for information at:
+
+=over 4
+
+=item * RT: CPAN's request tracker
+
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Math-BigInt-Named>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/Math-BigInt-Named>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/dist/Math-BigInt-Named>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/Math-BigInt-Named/>
+
+=item * CPAN Testers Matrix
+
+L<http://matrix.cpantesters.org/?dist=Math-BigInt-Named>
+
+=back
 
 =head1 LICENSE
 
@@ -129,15 +161,24 @@ the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<Math::BigFloat> and L<Math::Big> as well as L<Math::BigInt::BitVect>,
-L<Math::BigInt::Pari> and  L<Math::BigInt::GMP>.
-
-The package at
-L<http://search.cpan.org/search?dist=Math-BigInt-Named> may
-contain more documentation and examples as well as testcases.
+L<Math::BigIn> and L<Math::BigFloat>.
 
 =head1 AUTHORS
 
-(C) by Tels in late 2001, early 2002. Based on work by Chris London Noll.
+=over 4
+
+=item *
+
+(C) by Tels http://bloodgate.com in late 2001, early 2002, 2007.
+
+=item *
+
+Maintainted by Peter John Acklam E<lt>pjacklam@gmail.com<gt>, 2016-.
+
+=item *
+
+Based on work by Chris London Noll.
+
+=back
 
 =cut

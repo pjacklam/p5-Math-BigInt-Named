@@ -1,5 +1,9 @@
 Version history for Math::BigInt::Named:
 
+2018-xx-xx v0.05 pjacklam
+
+ * Increment version number.
+
 2016-12-03 v0.04 pjacklam
 
  * Use ExtUtils::MakeMaker rather than Module::Install in Makefile.PL

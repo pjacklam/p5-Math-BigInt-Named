@@ -11,7 +11,7 @@ our ($accuracy, $precision, $round_mode, $div_scale);
 use Math::BigInt '1.97';
 our @ISA = qw(Math::BigInt);
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 # Globals
 $accuracy = $precision = undef;

@@ -1,5 +1,8 @@
 0.05 Not Released
 
+ * Convert test files t/pod.t and t/pod_cov.t into t/release-pod.t and
+   t/release-pod-coverage.t.
+
  * The tests now require Test::More version 0.88 or newer.
 
  * Add test file t/release-test-version.t, t/release-portability.t, and

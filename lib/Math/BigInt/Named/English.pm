@@ -34,7 +34,6 @@ sub name
     {
     return $ret . $self->_triple($y,1,0);
     }
-  my $triple;
   while (!$y->is_zero())
     {
     ($y,$rem) = $y->bdiv(1000);
@@ -127,7 +126,7 @@ sub _triple
   # input: number 	>= 0, < 1000)
   #        only    	true if triple is the only triple ever ($nr < 1000)
   #	   index	0 for last triple, 1 for thousand, 2 for million etc
-  my ($self,$number,$only,$index) = @_;
+  my ($self,$number,$only) = @_;
 
   return '' if $number->is_zero() && !$only;	# 0 => null, but only for one
   return $SMALL->[$number] if $number < scalar @$SMALL;	# known name
@@ -217,7 +216,7 @@ the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<Math::BigInt::Named>, L<Math::BigIn> and L<Math::BigFloat>.
+L<Math::BigInt::Named>, L<Math::BigInt> and L<Math::BigFloat>.
 
 =head1 AUTHORS
 
@@ -229,7 +228,7 @@ L<Math::BigInt::Named>, L<Math::BigIn> and L<Math::BigFloat>.
 
 =item *
 
-Maintained by Peter John Acklam E<lt>pjacklam@gmail.com<gt>, 2016-.
+Maintained by Peter John Acklam E<lt>pjacklam@gmail.comE<gt>, 2016-.
 
 =back
 

@@ -67,7 +67,6 @@ sub name
 sub from_name
   {
   # create a Math::BigInt::Name from a name string
-  my $name = shift;
 
   my $x = Math::BigInt->bnan();
   }
@@ -116,11 +115,11 @@ Create a Math::BigInt::Name from a name string. B<Not yet implemented!>
 =head1 BUGS
 
 Please report any bugs or feature requests to
-C<bug-math-bigint at rt.cpan.org>, or through the web interface at
+C<bug-math-bigint-named at rt.cpan.org>, or through the web interface at
 L<https://rt.cpan.org/Ticket/Create.html?Queue=Math-BigInt-Named>
 (requires login).
-We will be notified, and then you'll automatically be notified of
-progress on your bug as I make changes.
+We will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
 
 =head1 SUPPORT
 
@@ -132,25 +131,25 @@ You can also look for information at:
 
 =over 4
 
+=item * GitHub
+
+L<https://github.com/pjacklam/p5-Math-BigInt-Named>
+
 =item * RT: CPAN's request tracker
 
-L<https://rt.cpan.org/Public/Dist/Display.html?Name=Math-BigInt-Named>
+L<https://rt.cpan.org/Dist/Display.html?Name=Math-BigInt-Named>
 
-=item * AnnoCPAN: Annotated CPAN documentation
+=item * MetaCPAN
 
-L<http://annocpan.org/dist/Math-BigInt-Named>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/dist/Math-BigInt-Named>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Math-BigInt-Named/>
+L<https://metacpan.org/release/Math-BigInt-Named>
 
 =item * CPAN Testers Matrix
 
 L<http://matrix.cpantesters.org/?dist=Math-BigInt-Named>
+
+=item * CPAN Ratings
+
+L<https://cpanratings.perl.org/dist/Math-BigInt-Named>
 
 =back
 
@@ -161,7 +160,7 @@ the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<Math::BigIn> and L<Math::BigFloat>.
+L<Math::BigInt> and L<Math::BigFloat>.
 
 =head1 AUTHORS
 
@@ -173,7 +172,7 @@ L<Math::BigIn> and L<Math::BigFloat>.
 
 =item *
 
-Maintainted by Peter John Acklam E<lt>pjacklam@gmail.com<gt>, 2016-.
+Maintainted by Peter John Acklam E<lt>pjacklam@gmail.comE<gt>, 2016-.
 
 =item *
 

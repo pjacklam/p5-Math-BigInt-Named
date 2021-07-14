@@ -1,12 +1,8 @@
-0.05 Not Released
+0.05 2021-07-21
 
- * Convert test files t/pod.t and t/pod_cov.t into t/release-pod.t and
-   t/release-pod-coverage.t.
+ * Reorganize existing test files, and add more test files.
 
  * The tests now require Test::More version 0.88 or newer.
-
- * Add test file t/release-test-version.t, t/release-portability.t, and
-   t/release-cpan-changes.t.
 
  * New MANIFEST.SKIP file based on the template in the ExtUtils-Manifest
    distribution.

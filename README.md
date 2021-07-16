@@ -6,14 +6,14 @@ Math::BigInt::Named - Math::BigInts that know their name in some languages
 
     use Math::BigInt::Named;
 
-    $x = Math::BigInt::Named->new($str);
+    $x = Math::BigInt::Named->new("123");
 
-    print $x->name(),"\n";                        # default is english
-    print $x->name( language => 'de' ),"\n";      # but German is possible
-    print $x->name( language => 'German' ),"\n";  # like this
-    print $x->name( { language => 'en' } ),"\n";  # this works, too
+    print $x->name(),"\n";                      # default is english
+    print $x->name( language => 'de' ),"\n";    # but German is possible
+    print $x->name( language => 'German' ),"\n";        # like this
+    print $x->name( { language => 'en' } ),"\n";        # this works, too
 
-    print Math::BigInt::Named->from_name('einhundert dreiundzwanzig),"\n";
+    print Math::BigInt::Named->from_name("einhundert dreiundzwanzig"),"\n";
 
 # DESCRIPTION
 
@@ -23,13 +23,13 @@ This is a subclass of Math::BigInt and adds support for named numbers.
 
 ## name()
 
-        print Math::BigInt::Name->name( 123 );
+    print Math::BigInt::Name->name( 123 );
 
 Convert a BigInt to a name.
 
 ## from\_name()
 
-        my $bigint = Math::BigInt::Name->from_name('hundertzwanzig');
+    my $bigint = Math::BigInt::Name->from_name('hundertzwanzig');
 
 Create a Math::BigInt::Name from a name string. **Not yet implemented!**
 

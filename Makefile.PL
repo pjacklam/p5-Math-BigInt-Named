@@ -27,6 +27,7 @@ WriteMakefile
 
    'PREREQ_PM'          => {
                             'Math::BigInt'        => 1.97,
+                            'Carp'                => 0,
                            },
 
    # A hash of modules that are needed to test the module but not run or build

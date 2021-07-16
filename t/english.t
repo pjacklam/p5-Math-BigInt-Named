@@ -1,15 +1,11 @@
-#!/usr/bin/perl -w
+#!perl
 
 use strict;
-use Test;
+use warnings;
 
-BEGIN
-  {
-  $| = 1;
-  chdir 't' if -d 't';
-  unshift @INC, '../lib'; # for running manually
-  plan tests => 83;
-  }
+use Test::More;
+
+plan tests => 83;
 
 # testing of Math::BigInt::Named::English, primarily for the $x->name() and
 # $x->from_name() functionality, and not for the math functionality
@@ -21,42 +17,44 @@ my $c = 'Math::BigInt::Named::English';
 
 ###############################################################################
 # triple names
-my $x = Math::BigInt->bzero();
-my $y = Math::BigInt->new(2);
+my $x = Math::BigInt -> bzero();
+my $y = Math::BigInt -> new(2);
 
-ok ($c->_triple_name(0,$x),'');			# null
-ok ($c->_triple_name(2,$x),'');			# null millionen
+is($c -> _triple_name(0, $x), '');              # null
+is($c -> _triple_name(2, $x), '');              # null millionen
 $x++;
-ok ($c->_triple_name(1,$x),'thousand');
+is($c -> _triple_name(1, $x), 'thousand');
 my $i = 2;
-for (qw/ m b tr quadr pent hex sept oct / )
-  {
-  ok ($c->_triple_name($i,$x),$_ . 'i' . 'llion');
-  ok ($c->_triple_name($i+1,$x),$_ . 'i' . 'lliard');
-  ok ($c->_triple_name($i,$y),$_ . 'i' . 'llions');
-  ok ($c->_triple_name($i+1,$y),$_ . 'i' . 'lliards');
-  $i += 2;
-  }
+for (qw/ m b tr quadr pent hex sept oct / ) {
+    is($c -> _triple_name($i,   $x), $_ . 'i' . 'llion');
+    is($c -> _triple_name($i+1, $x), $_ . 'i' . 'lliard');
+    is($c -> _triple_name($i,   $y), $_ . 'i' . 'llions');
+    is($c -> _triple_name($i+1, $y), $_ . 'i' . 'lliards');
+    $i += 2;
+}
 
 ###############################################################################
 # assorted names
 
-while (<DATA>)
-  {
-  chomp;
-  next if /^\s*$/;	# empty lines
-  next if /^#/;		# comments
-  my @args = split (/:/,$_);
+while (<DATA>) {
+    chomp;
+    next if !/\S/;              # empty lines
+    next if /^#/;               # comments
+    my @args = split /:/;
 
-  ok ($c->new($args[0])->name(),$args[1]);
-  # ok ($c->from_name($args[1]),$args[0]);
-  }
+    my $got      = $c -> new($args[0]) -> name();
+    my $expected = $args[1];
+    my $test     = $args[0] . " -> " . $args[1];
+    is($got, $expected, $test);
+    # is($c -> from_name($args[1]), $args[0]);
+}
 
 
 ###############################################################################
 
 # nothing valid at all
-$x = $c->new('foo'); ok ($x,'NaN');
+$x = $c -> new('foo');
+is($x, 'NaN', "foo -> NaN");
 
 # done
 
@@ -76,7 +74,7 @@ __END__
 9:nine
 10:ten
 11:eleven
-12:twelf
+12:twelve
 13:thirteen
 14:fourteen
 15:fifteen

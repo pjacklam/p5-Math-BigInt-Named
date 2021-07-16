@@ -6,21 +6,22 @@ use 5.006001;
 use strict;
 use warnings;
 
-our ($accuracy, $precision, $round_mode, $div_scale);
+use Carp qw( carp croak );
 
-use Math::BigInt '1.97';
+use Math::BigInt 1.97;
 our @ISA = qw(Math::BigInt);
 
 our $VERSION = '0.05';
 
-# Globals
-$accuracy = $precision = undef;
+# Globals.
+
+our ($accuracy, $precision, $round_mode, $div_scale);
+$accuracy   = undef;
+$precision  = undef;
 $round_mode = 'even';
-$div_scale = 40;
+$div_scale  = 40;
 
-use Math::BigInt::Named::English;		# default
-
-# Not all of them exist yet
+# Not all of them exist yet.
 my $LANGUAGE = {
   en => 'english',
   de => 'german',
@@ -30,46 +31,66 @@ my $LANGUAGE = {
   it => 'italian',
   };
 
+# Index of languages that have been loaded.
+
 my $LOADED = { };
 
-sub name
-  {
-  # output the name of the number
-  my ($x) = shift;
+sub name {
+    # output the name of the number
+    my $x = shift;
 
-  # make Math::BigInt::Name->name(123) work
-  $x = $x->new( shift ) unless ref ($x);
+    # make Math::BigInt::Name -> name(123) work
+    $x = $x -> new(shift) unless ref($x);
 
-  return 'NaN' if $x->is_nan();
+    return 'NaN' if $x -> is_nan();
 
-  my $opt;
-  if (ref($_[0]) eq 'HASH')
-    {
-    $opt = shift;
+    my @args = ();
+    if (@_) {
+        if (ref($_[0]) eq 'HASH') {
+            carp "When the options are given as a hash ref, additional",
+              " arguments are ignored" if @_ > 1;
+            @args = %{ $_[0] };
+        } else {
+            @args = @_;
+        }
     }
-  else
-    {
-    $opt = { @_ };
+
+    my $lang;
+    while (@args) {
+        my $param = shift @args;
+        croak "Parameter name can not be undefined" unless defined $param;
+        croak "Parameter name can not be an empty string" unless length $param;
+
+        if ($param =~ /^lang(uage)?$/) {
+            $lang = shift @args;
+            croak "Language can not be undefined" unless defined $lang;
+            croak "Language can not be an empty string" unless length $lang;
+            next;
+        }
+
+        croak "Invalid parameter '$param'";
     }
-  my $lang = $opt->{language} || 'english';
-  $lang = $LANGUAGE->{$lang} if exists $LANGUAGE->{$lang};	# en => english
 
-  $lang = 'Math::BigInt::Named::' . ucfirst($lang);
+    $lang = 'english' unless defined $lang;
+    $lang = $LANGUAGE -> {$lang} if exists $LANGUAGE -> {$lang}; # en => english
 
-  if (!defined $LOADED->{$lang})
-    {
-    eval "use $lang;"; $LOADED->{$lang} = 1;
+    $lang = 'Math::BigInt::Named::' . ucfirst($lang);
+
+    if (!defined $LOADED -> {$lang}) {
+        eval "require $lang;";
+        croak "Can't load module '$lang'" if $@;
+        $LOADED -> {$lang} = 1;
     }
-  my $y = $lang->new($x);
-  $y->name();
-  }
 
-sub from_name
-  {
-  # create a Math::BigInt::Name from a name string
+    my $y = $lang -> new($x);
+    $y -> name();
+}
 
-  my $x = Math::BigInt->bnan();
-  }
+sub from_name {
+    # Create a Math::BigInt::Name from a name string. Not implemented.
+
+    my $x = Math::BigInt -> bnan();
+}
 
 1;
 
@@ -83,16 +104,16 @@ Math::BigInt::Named - Math::BigInts that know their name in some languages
 
 =head1 SYNOPSIS
 
-  use Math::BigInt::Named;
+    use Math::BigInt::Named;
 
-  $x = Math::BigInt::Named->new($str);
+    $x = Math::BigInt::Named->new("123");
 
-  print $x->name(),"\n";			# default is english
-  print $x->name( language => 'de' ),"\n";	# but German is possible
-  print $x->name( language => 'German' ),"\n";	# like this
-  print $x->name( { language => 'en' } ),"\n";	# this works, too
+    print $x->name(),"\n";                      # default is english
+    print $x->name( language => 'de' ),"\n";    # but German is possible
+    print $x->name( language => 'German' ),"\n";        # like this
+    print $x->name( { language => 'en' } ),"\n";        # this works, too
 
-  print Math::BigInt::Named->from_name('einhundert dreiundzwanzig),"\n";
+    print Math::BigInt::Named->from_name("einhundert dreiundzwanzig"),"\n";
 
 =head1 DESCRIPTION
 
@@ -102,13 +123,13 @@ This is a subclass of Math::BigInt and adds support for named numbers.
 
 =head2 name()
 
-	print Math::BigInt::Name->name( 123 );
+    print Math::BigInt::Name->name( 123 );
 
 Convert a BigInt to a name.
 
 =head2 from_name()
 
-	my $bigint = Math::BigInt::Name->from_name('hundertzwanzig');
+    my $bigint = Math::BigInt::Name->from_name('hundertzwanzig');
 
 Create a Math::BigInt::Name from a name string. B<Not yet implemented!>
 

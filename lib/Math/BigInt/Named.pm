@@ -11,7 +11,7 @@ use Carp qw( carp croak );
 use Math::BigInt 1.97;
 our @ISA = qw(Math::BigInt);
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 # Globals.
 
@@ -29,6 +29,7 @@ my $LANGUAGE = {
   fr => 'french',
   ro => 'romana',
   it => 'italian',
+  no => 'norwegian',
   };
 
 # Index of languages that have been loaded.

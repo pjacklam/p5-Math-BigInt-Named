@@ -78,8 +78,11 @@ sub name {
     $lang = 'Math::BigInt::Named::' . ucfirst($lang);
 
     if (!defined $LOADED -> {$lang}) {
-        eval "require $lang;";
-        croak "Can't load module '$lang'" if $@;
+        my $file = $lang;
+        $file =~ s|::|/|g;
+        $file .= ".pm";
+        eval { require $file; };
+        croak $@ if $@;
         $LOADED -> {$lang} = 1;
     }
 

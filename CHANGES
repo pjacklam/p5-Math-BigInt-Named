@@ -1,3 +1,7 @@
+0.07 2021-07-17
+
+ * Fix English names cf. CPAN RT #71259.
+
 0.06 2021-07-16
 
  * Add support for Norwegian.

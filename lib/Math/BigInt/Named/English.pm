@@ -2,7 +2,6 @@
 
 package Math::BigInt::Named::English;
 
-use 5.006001;
 use strict;
 use warnings;
 
@@ -10,39 +9,6 @@ use Math::BigInt::Named;
 our @ISA = qw< Math::BigInt::Named >;
 
 our $VERSION = '0.07';
-
-sub name {
-    my $x = shift;
-    $x = Math::BigInt -> new($x) unless ref($x);
-
-    my $class = ref($x);
-
-    return '' if $x -> is_nan();
-
-    my $index = 0;
-
-    my $ret = '';
-    my $y = $x -> copy();
-    my $rem;
-
-    if ($y -> sign() eq '-') {
-        $ret = 'minus ';
-        $y -> babs();
-    }
-
-    if ($y < 1000) {
-        return $ret . $class -> _triple($y, 1, 0);
-    }
-
-    while (!$y -> is_zero()) {
-        ($y, $rem) = $y -> bdiv(1000);
-        $ret = $class -> _triple($rem, 0, $index)
-          . ' ' . $class -> _triple_name($index, $rem) . ' ' . $ret;
-        $index++;
-    }
-    $ret =~ s/\s+$//;           # trailing spaces
-    $ret;
-}
 
 my $SMALL = [ qw/
   zero
@@ -67,7 +33,7 @@ my $SMALL = [ qw/
   nineteen
   / ];
 
-my $ZEHN = [ qw /
+my $TENS = [ qw /
   ten
   twenty
   thirty
@@ -79,7 +45,7 @@ my $ZEHN = [ qw /
   ninety
   / ];
 
-my $HUNDERT = [ qw /
+my $HUNDREDS = [ qw /
   one
   two
   three
@@ -102,8 +68,74 @@ my $TRIPLE = [ qw /
   octi
   / ];
 
+sub name {
+    my $x = shift;
+    $x = Math::BigInt -> new($x) unless ref($x);
+
+    my $class = ref($x);
+
+    return '' if $x -> is_nan();
+
+    my $ret = '';
+    my $y = $x -> copy();
+    my $rem;
+
+    if ($y -> sign() eq '-') {
+        $ret = 'minus ';
+        $y -> babs();
+    }
+
+    if ($y < 1000) {
+        return $ret . $class -> _triple($y, 1, 0);
+    }
+
+    # Split the number into numerical triplets.
+
+    my @num = ();
+    while (!$y -> is_zero()) {
+        ($y, $rem) = $y -> bdiv(1000);
+        unshift @num, $rem;
+    }
+
+    # Convert each numerical triplet into a string.
+
+    my @str = ();
+    for my $i (0 .. $#num) {
+        my $num = $num[$i];
+        my $str;
+        my $index = $#num - $i;
+
+        my $count;
+        $count = $class -> _triple($num, 0, $i);
+        $str .= $count;
+
+        if ($index > 0) {
+            my $triple_name = $class -> _triple_name($#num - $i, $num);
+            $str .= ' ' . $triple_name;
+        }
+
+        $str[$i] = $str;
+    }
+
+    # 1100 -> "one thousand one hundred"      (not "one thousand and one hundred")
+    # 1099 -> "one thousand and ninety-nine"  (not "one thousand ninety-nine")
+    # 1098 -> "one thousand and ninety-eight" (not "one thousand ninety-eight")
+    # ...
+    # 1001 -> "one thousand and one"          (not "one thousand one")
+    # 1000 -> "one thousand"                  (not "one thousand and zero")
+
+    if (@num > 1 && 0 < $num[-1] && $num[-1] < 100) {
+        splice @str, -1, 0, "and";
+    }
+
+    $ret . join(" ", grep /\S/, @str);
+}
+
 sub _triple_name {
     my ($self, $index, $number) = @_;
+    # index => 0 hundreds, tens and ones
+    # index => 1 thousands
+    # index => 2 millions
 
     return '' if $index == 0 || $number -> is_zero();
     return 'thousand' if $index == 1;
@@ -115,37 +147,57 @@ sub _triple_name {
     }
     $postfix .= $plural unless $number -> is_one();
     $index -= 2;
-    $TRIPLE -> [$index >> 1] . $postfix;
+    return $TRIPLE -> [$index >> 1] . $postfix;
 }
 
 sub _triple {
-    # return name of a triple (aka >= 0, and <= 1000)
+    # return name of a triple
     # input: number     >= 0, < 1000
-    #        only       true if triple is the only triple ever ($nr < 1000)
-    #       index       0 for last triple, 1 for thousand, 2 for million etc
+    #        only       true if triple is the only triple
     my ($self, $number, $only) = @_;
 
-    return '' if $number -> is_zero() && !$only; # 0 => null, but only for one
-    return $SMALL -> [$number] if $number < scalar @$SMALL; # known name
+    # 0 => null, but only if there is just one triple
+    return '' if $number -> is_zero() && !$only;
 
-    my $hundert = $number / 100;
-    my $rem = $number % 100;
-    my $rc = '';
-    $rc = $HUNDERT -> [$hundert-1] . "hundred" if !$hundert -> is_zero();
+    # we have the full name for these
+    return $SMALL -> [$number] if $number <= $#$SMALL;
 
-    my $concat = '';
-    $concat = 'and' if $rc ne '';
-    return $rc if $rem -> is_zero();
-    return $rc . $concat . $SMALL -> [$rem] if $rem < scalar @$SMALL;
+    # New code:
 
-    my $zehn;
-    ($zehn, $rem) = $rem -> bdiv(10);
+    my @num = ();
+    $num[1] = $number % 100;                # tens and ones
+    $num[0] = ($number - $num[1]) / 100;    # hundreds
 
-    my $last = '';
-    $last = $HUNDERT -> [$rem-1] if !$rem -> is_zero();    # 31, 32..
-    $last = $ZEHN -> [$zehn-1] . $last if !$zehn -> is_zero(); # 1, 2, 3..
+    my @str = ();
 
-    $rc . $last;
+    # Do the hundreds, if any.
+
+    if ($num[0]) {
+        my $str;
+        $str = $HUNDREDS -> [$num[0] - 1];
+        $str .= " hundred";
+        push @str, $str;
+    }
+
+    # Do the tens and ones, if any.
+
+    if ($num[1]) {
+        my $str;
+        my $ones = $num[1] % 10;
+        my $tens = ($num[1] - $ones) / 10;
+        if ($num[1] <= $#$SMALL) {
+            $str = $SMALL -> [ $num[1] ];
+        } else {
+            $str = $TENS -> [ $tens - 1];
+            if ($ones > 0) {
+                $str .= "-";
+                $str .= $SMALL -> [ $ones ];
+            }
+        }
+        push @str, $str;
+    }
+
+    return join " and ", @str;
 }
 
 1;
@@ -162,11 +214,11 @@ Math::BigInt::Named::English - Math::BigInts that know their name in English
 
     use Math::BigInt::Named::English;
 
-    $x = Math::BigInt::Named::English->new($str);
+    $x = Math::BigInt::Named::English -> new("123");
+    $str = $x -> name();
 
-    print $x->name(),"\n";
-
-    print Math::BigInt::Named::English->from_name('one hundredandfive),"\n";
+    $str = "ett hundre og to";
+    $x = Math::BigInt::Named::English -> from_name($str);
 
 =head1 DESCRIPTION
 
@@ -180,13 +232,13 @@ L<Math::BigInt::Named>.
 
 =head2 name()
 
-    print Math::BigInt::Name->name( 123 );
+    print Math::BigInt::Name -> name( 123 );
 
 Convert a BigInt to a name.
 
 =head2 from_name()
 
-    my $bigint = Math::BigInt::Name->from_name('hundertzwanzig');
+    my $bigint = Math::BigInt::Name -> from_name('twenty-four');
 
 Create a Math::BigInt::Name from a name string. B<Not yet implemented!>
 
@@ -215,7 +267,7 @@ the same terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<Math::BigInt::Named>, L<Math::BigInt> and L<Math::BigFloat>.
+L<Math::BigInt::Named> and L<Math::BigInt>.
 
 =head1 AUTHORS
 
@@ -223,11 +275,7 @@ L<Math::BigInt::Named>, L<Math::BigInt> and L<Math::BigFloat>.
 
 =item *
 
-(C) by Tels http://bloodgate.com in late 2001, early 2002, 2007.
-
-=item *
-
-Maintained by Peter John Acklam E<lt>pjacklam@gmail.comE<gt>, 2016-.
+Peter John Acklam E<lt>pjacklam@gmail.comE<gt>, 2021.
 
 =back
 

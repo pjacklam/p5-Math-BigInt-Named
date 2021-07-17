@@ -5,7 +5,7 @@ use warnings;
 
 use Test::More;
 
-plan tests => 83;
+plan tests => 89;
 
 # testing of Math::BigInt::Named::English, primarily for the $x->name() and
 # $x->from_name() functionality, and not for the math functionality
@@ -83,28 +83,38 @@ __END__
 18:eighteen
 19:nineteen
 20:twenty
-21:twentyone
-22:twentytwo
-33:thirtythree
-44:fourtyfour
-55:fiftyfive
-66:sixtysix
-77:seventyseven
-88:eightyeight
-99:ninetynine
-100:onehundred
-200:twohundred
-300:threehundred
-400:fourhundred
-500:fivehundred
-600:sixhundred
-700:sevenhundred
-800:eighthundred
-900:ninehundred
+21:twenty-one
+22:twenty-two
+33:thirty-three
+44:fourty-four
+55:fifty-five
+66:sixty-six
+77:seventy-seven
+88:eighty-eight
+99:ninety-nine
+
+100:one hundred
+200:two hundred
+300:three hundred
+400:four hundred
+500:five hundred
+600:six hundred
+700:seven hundred
+800:eight hundred
+900:nine hundred
+
+101:one hundred and one
+202:two hundred and two
+
 1000:one thousand
-101:onehundredandone
-202:twohundredandtwo
-1001:one thousand one
-1002:one thousand two
-1102:one thousand onehundredandtwo
-1122:one thousand onehundredtwentytwo
+1001:one thousand and one
+1002:one thousand and two
+1098:one thousand and ninety-eight
+1099:one thousand and ninety-nine
+1100:one thousand one hundred
+1102:one thousand one hundred and two
+1122:one thousand one hundred and twenty-two
+
+1000000:one million
+1000001:one million and one
+1000100:one million one hundred

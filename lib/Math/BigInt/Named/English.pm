@@ -8,7 +8,7 @@ use warnings;
 use Math::BigInt::Named;
 our @ISA = qw< Math::BigInt::Named >;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 my $SMALL = [ qw/
   zero

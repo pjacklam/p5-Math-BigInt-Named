@@ -11,7 +11,7 @@ use Carp qw( carp croak );
 use Math::BigInt 1.97;
 our @ISA = qw(Math::BigInt);
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 # Globals.
 

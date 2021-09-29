@@ -165,7 +165,7 @@ __END__
 
 =head1 NAME
 
-Math::BigInt::Named::German - Math::BigInts that know their name in German
+Math::BigInt::Named::German - Math::BigInt objects that know their name in German
 
 =head1 SYNOPSIS
 
@@ -191,7 +191,7 @@ L<Math::BigInt::Named>.
 
 	print Math::BigInt::Name->name( 123 );
 
-Convert a BigInt to a name.
+Convert a Math::BigInt to a name.
 
 =head2 from_name()
 
